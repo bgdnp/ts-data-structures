@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { dtsPlugin } from 'esbuild-plugin-d.ts';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 
@@ -23,4 +24,5 @@ build({
   bundle: true,
   treeShaking: true,
   minify: false,
+  plugins: [dtsPlugin()],
 });

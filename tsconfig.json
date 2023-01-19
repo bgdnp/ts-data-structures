@@ -4,10 +4,14 @@
     "module": "commonjs",
     "target": "ES2021",
     "baseUrl": ".",
-    "rootDir": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "sourceMap": true,
     "paths": {}
-  }
+  },
+  "include": ["./src/**/*"]
 }
