@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "ts-node esbuild.config.ts",
-    "declaration": "tsc --emitDeclarationOnly --declaration --outFile dist/index.d.ts src/index.ts",
+    "format": "prettier --write \"./**/*.ts\"",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "prepublish": "npm run test && npm run build",
     "test": "jest --coverage"
   },
   "repository": {

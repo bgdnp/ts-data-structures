@@ -3,6 +3,16 @@ import { LinkedList } from './linked-list';
 describe('LinkedList', () => {
   const ll = new LinkedList<number>();
 
+  describe('fromArray', () => {
+    it('should create list from array', () => {
+      const ll2 = LinkedList.fromArray([1, 2, 3]);
+
+      expect(ll2.get(0)).toBe(1);
+      expect(ll2.get(1)).toBe(2);
+      expect(ll2.get(2)).toBe(3);
+    });
+  });
+
   describe('push', () => {
     it('should add value to the end of the list', () => {
       expect(ll.length).toBe(0);

@@ -1,14 +1,16 @@
 class Node<T> {
   public value: T;
   public next: Node<T> | null;
+  public prev: Node<T> | null;
 
   constructor(value: T) {
     this.value = value;
     this.next = null;
+    this.prev = null;
   }
 }
 
-export class LinkedList<T> {
+export class DoublyLinkedList<T> {
   public length: number;
   private head: Node<T> | null;
   private tail: Node<T> | null;
@@ -19,21 +21,22 @@ export class LinkedList<T> {
     this.tail = null;
   }
 
-  public static fromArray<T>(arr: T[]): LinkedList<T> {
-    const self = new LinkedList<T>();
+  public static fromArray<T>(arr: T[]): DoublyLinkedList<T> {
+    const self = new DoublyLinkedList<T>();
 
     arr.forEach((el) => self.push(el));
 
     return self;
   }
 
-  public push(value: T): LinkedList<T> {
+  public push(value: T): DoublyLinkedList<T> {
     const node = new Node(value);
 
     if (!this.head) {
       this.head = node;
       this.tail = node;
     } else {
+      node.prev = this.tail;
       this.tail.next = node;
       this.tail = node;
     }
@@ -47,7 +50,7 @@ export class LinkedList<T> {
     return this.popNode()?.value;
   }
 
-  public unshift(value: T): LinkedList<T> {
+  public unshift(value: T): DoublyLinkedList<T> {
     const node = new Node(value);
 
     if (!this.head) {
@@ -55,6 +58,7 @@ export class LinkedList<T> {
       this.tail = node;
     } else {
       node.next = this.head;
+      this.head.prev = node;
       this.head = node;
     }
 
@@ -71,7 +75,7 @@ export class LinkedList<T> {
     return this.getNode(index)?.value;
   }
 
-  public set(index: number, value: T): LinkedList<T> {
+  public set(index: number, value: T): DoublyLinkedList<T> {
     const node = this.getNode(index);
 
     if (node) {
@@ -85,7 +89,7 @@ export class LinkedList<T> {
     return this.removeNode(index)?.value;
   }
 
-  public reverse(): LinkedList<T> {
+  public reverse(): DoublyLinkedList<T> {
     let prev = null;
     let temp = this.head;
 
@@ -95,11 +99,13 @@ export class LinkedList<T> {
     while (temp.next) {
       const next = temp.next;
       temp.next = prev;
+      temp.prev = next;
       prev = temp;
       temp = next;
     }
 
     temp.next = prev;
+    temp.prev = null;
 
     return this;
   }
@@ -110,7 +116,7 @@ export class LinkedList<T> {
     }
 
     if (this.head === this.tail) {
-      const temp = this.head;
+      const temp = this.tail;
       this.head = null;
       this.tail = null;
       this.length--;
@@ -118,16 +124,10 @@ export class LinkedList<T> {
       return temp;
     }
 
-    let temp = this.head;
-    let prev = null;
-
-    while (temp.next) {
-      prev = temp;
-      temp = temp.next;
-    }
-
-    this.tail = prev;
+    const temp = this.tail;
+    this.tail = this.tail.prev;
     this.tail.next = null;
+    temp.prev = null;
     this.length--;
 
     return temp;
@@ -149,13 +149,14 @@ export class LinkedList<T> {
 
     const temp = this.head;
     this.head = temp.next;
+    this.head.prev = null;
     temp.next = null;
     this.length--;
 
     return temp;
   }
 
-  private getNode(index): Node<T> {
+  private getNode(index: number): Node<T> {
     if (index < 0 || index >= this.length) {
       return undefined;
     }
@@ -187,7 +188,9 @@ export class LinkedList<T> {
     }
 
     prev.next = temp.next;
+    temp.next.prev = prev;
     temp.next = null;
+    temp.prev = null;
     this.length--;
 
     return temp;
