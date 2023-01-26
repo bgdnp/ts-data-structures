@@ -1,1 +1,1 @@
-export { LinkedList } from './linked-list/linked-list';
+export * from './linked-list';
